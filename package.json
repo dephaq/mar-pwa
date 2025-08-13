@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": ["apps/*", "packages/*", "services/*"],
   "scripts": {
-    "typecheck": "npm run typecheck -ws"
+    "typecheck": "npm run typecheck -ws",
+    "gen:api-types": "npm run generate -w @mar/shared"
   }
 }
