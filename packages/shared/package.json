@@ -1,0 +1,13 @@
+{
+  "name": "@mar/shared",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "generate": "openapi-typescript ../../services/api/openapi.yaml -o src/api-types.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^6.7.0",
+    "typescript": "^5.4.0"
+  }
+}
