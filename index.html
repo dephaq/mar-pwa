@@ -60,12 +60,13 @@
       height: 100vh;
     }
     .header {
-      height: 50px;
+      /* Reduced height to give more space on the page */
+      height: 45px;
       background-color: #0077cc;
       color: #ffffff;
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 16px;
       flex-shrink: 0;
     }
     .header h1 {
@@ -139,6 +140,52 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
+    /* Hamburger icon for mobile */
+    .hamburger {
+      font-size: 24px;
+      cursor: pointer;
+      margin-right: 12px;
+      user-select: none;
+      display: none;
+    }
+
+    /* Close button for the sidebar on mobile */
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 16px;
+      user-select: none;
+      display: none;
+      align-self: flex-end;
+    }
+
+    /* Mobile specific styles */
+    @media (max-width: 768px) {
+      /* Sidebar hidden by default on small screens */
+      .sidenav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        width: 240px;
+      }
+      .sidenav.open {
+        transform: translateX(0);
+      }
+      .close-btn {
+        display: block;
+      }
+      .hamburger {
+        display: block;
+      }
+      .app-container {
+        overflow-x: hidden;
+      }
+    }
   </style>
 </head>
 <body>
@@ -146,6 +193,8 @@
     <!-- Sidebar -->
     <nav class="sidenav" id="sidenav">
       <div class="logo">MAR Consult</div>
+      <!-- Close button for mobile -->
+      <span class="close-btn" onclick="toggleNav()">×</span>
       <div class="menu-item active" data-page="home" onclick="navigate(this)">Главная</div>
       <div class="menu-item" data-page="questionnaire" onclick="navigate(this)">Моя анкета</div>
       <div class="menu-item" data-page="profile" onclick="navigate(this)">Заполнить профиль</div>
@@ -158,6 +207,8 @@
     <!-- Main content area -->
     <div class="main">
       <div class="header">
+        <!-- Hamburger for mobile -->
+        <span class="hamburger" onclick="toggleNav()">☰</span>
         <h1 id="page-title">Главная</h1>
       </div>
       <div class="content">
@@ -265,6 +316,15 @@
       event.preventDefault();
       const name = document.getElementById('name').value;
       alert(`Спасибо, ${name || 'участник'}! Ваш профиль сохранен.`);
+    }
+
+    /**
+     * Переключает отображение бокового меню на мобильных устройствах.
+     * Добавляет или убирает класс `.open` у навигации.
+     */
+    function toggleNav() {
+      const nav = document.getElementById('sidenav');
+      nav.classList.toggle('open');
     }
 
     // Регистрация service worker
