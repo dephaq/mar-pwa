@@ -56,6 +56,20 @@ paths:
                   sent:
                     type: integer
 
+  /api/consents:
+    post:
+      operationId: createConsent
+      summary: Store user consent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentDto'
+      responses:
+        '201':
+          description: Created
+
   /api/campaigns:
     get:
       operationId: listCampaigns
@@ -421,6 +435,16 @@ components:
         - type: object
           properties:
             id: { type: string }
+
+    ConsentDto:
+      type: object
+      required: [version, textHash, givenAt]
+      properties:
+        version: { type: string }
+        textHash: { type: string }
+        givenAt:
+          type: string
+          format: date-time
 
     NotifyDto:
       type: object
