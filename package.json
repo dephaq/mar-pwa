@@ -1,7 +1,7 @@
 {
-  "name": "mar-pwa",
+  "name": "mar-pwa-monorepo",
   "private": true,
-  "workspaces": ["services/api", "packages/shared"],
+  "workspaces": ["apps/*", "packages/*", "services/*"],
   "scripts": {
     "typecheck": "npm run typecheck -ws"
   }
