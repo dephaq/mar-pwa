@@ -1,0 +1,8 @@
+{
+  "name": "mar-pwa",
+  "private": true,
+  "workspaces": ["services/api", "packages/shared"],
+  "scripts": {
+    "typecheck": "npm run typecheck -ws"
+  }
+}
