@@ -35,6 +35,129 @@ paths:
         '204':
           description: Deleted
 
+  /api/notify:
+    post:
+      operationId: notifyNow
+      summary: Send notification immediately
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotifyDto'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sent:
+                    type: integer
+
+  /api/campaigns:
+    get:
+      operationId: listCampaigns
+      summary: List campaigns
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignDto'
+    post:
+      operationId: createCampaign
+      summary: Create campaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignCreateDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignDto'
+
+  /api/campaigns/{id}:
+    get:
+      operationId: getCampaign
+      summary: Get campaign
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignDto'
+    post:
+      operationId: launchCampaign
+      summary: Launch campaign
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  launched:
+                    type: integer
+    put:
+      operationId: stopCampaign
+      summary: Stop campaign
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Stopped
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stopped:
+                    type: boolean
+
+  /api/campaigns/{id}/events:
+    get:
+      operationId: listCampaignEvents
+      summary: List campaign events
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationEventDto'
+
   /api/studies:
     get:
       operationId: listStudies
@@ -298,6 +421,63 @@ components:
         - type: object
           properties:
             id: { type: string }
+
+    NotifyDto:
+      type: object
+      properties:
+        segment: { type: object, additionalProperties: true }
+        title: { type: string }
+        body: { type: string }
+        url: { type: string }
+        ttl: { type: integer }
+
+    CampaignMessageDto:
+      type: object
+      required: [title, body]
+      properties:
+        title: { type: string }
+        body: { type: string }
+        url: { type: string }
+
+    CampaignCreateDto:
+      type: object
+      required: [name, message]
+      properties:
+        name: { type: string }
+        studyId: { type: string }
+        segment: { type: object, additionalProperties: true }
+        throttlePerMinute: { type: integer }
+        message:
+          $ref: '#/components/schemas/CampaignMessageDto'
+
+    CampaignDto:
+      allOf:
+        - $ref: '#/components/schemas/CampaignCreateDto'
+        - type: object
+          required: [id, createdAt, status]
+          properties:
+            id: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+            status:
+              type: string
+              enum: [draft, launched, stopped]
+
+    NotificationEventDto:
+      type: object
+      required: [id, campaignId, status, createdAt]
+      properties:
+        id: { type: string }
+        campaignId: { type: string }
+        subscriptionId: { type: string }
+        status:
+          type: string
+          enum: [sent, failed]
+        error: { type: string }
+        createdAt:
+          type: string
+          format: date-time
 
     CreateStudyDto:
       type: object

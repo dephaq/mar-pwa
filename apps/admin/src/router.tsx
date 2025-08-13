@@ -10,12 +10,16 @@ import {
 import StudiesList from './routes/studies';
 import NewStudy from './routes/studies/NewStudy';
 import EditStudy from './routes/studies/EditStudy';
+import CampaignsList from './routes/campaigns';
+import NewCampaign from './routes/campaigns/NewCampaign';
+import ViewCampaign from './routes/campaigns/ViewCampaign';
 
 const rootRoute = new RootRoute({
   component: () => (
     <div>
       <nav style={{ display: 'flex', gap: '1rem' }}>
         <Link to="/studies">Исследования</Link>
+        <Link to="/campaigns">Кампании</Link>
       </nav>
       <Outlet />
     </div>
@@ -40,10 +44,31 @@ const editStudyRoute = new Route({
   component: EditStudy,
 });
 
+const campaignsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/campaigns',
+  component: CampaignsList,
+});
+
+const newCampaignRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/campaigns/new',
+  component: NewCampaign,
+});
+
+const viewCampaignRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/campaigns/$id',
+  component: ViewCampaign,
+});
+
 const routeTree = rootRoute.addChildren([
   studiesRoute,
   newStudyRoute,
   editStudyRoute,
+  campaignsRoute,
+  newCampaignRoute,
+  viewCampaignRoute,
 ]);
 
 export const router = new Router({

@@ -5,9 +5,37 @@ type Profile = components['schemas']['ProfileDto'];
 type PrescreenBlock = components['schemas']['PrescreenBlockDto'];
 
 export default function ProfilePage() {
+  async function enableNotifications() {
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      alert('Отказано');
+      return;
+    }
+    const registration = await navigator.serviceWorker.ready;
+    const key = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+    const sub = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(key),
+    });
+    await fetch('/api/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sub),
+    });
+    alert('Подписка включена');
+  }
+
+  function urlBase64ToUint8Array(base64String: string) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  }
+
   return (
     <div>
       <h2>Профиль</h2>
+      <button onClick={enableNotifications}>Включить уведомления</button>
       <ProfileForm />
       <h3>Прескрин</h3>
       <PrescreenForm />

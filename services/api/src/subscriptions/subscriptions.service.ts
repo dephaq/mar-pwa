@@ -15,4 +15,8 @@ export class SubscriptionsService {
   remove(id: string): void {
     this.subscriptions = this.subscriptions.filter((s) => s.id !== id);
   }
+
+  findAll(): SubscriptionDto[] {
+    return this.subscriptions;
+  }
 }

@@ -13,6 +13,28 @@ export interface paths {
     /** Remove subscription */
     delete: operations["deleteSubscription"];
   };
+  "/api/notify": {
+    /** Send notification immediately */
+    post: operations["notifyNow"];
+  };
+  "/api/campaigns": {
+    /** List campaigns */
+    get: operations["listCampaigns"];
+    /** Create campaign */
+    post: operations["createCampaign"];
+  };
+  "/api/campaigns/{id}": {
+    /** Get campaign */
+    get: operations["getCampaign"];
+    /** Stop campaign */
+    put: operations["stopCampaign"];
+    /** Launch campaign */
+    post: operations["launchCampaign"];
+  };
+  "/api/campaigns/{id}/events": {
+    /** List campaign events */
+    get: operations["listCampaignEvents"];
+  };
   "/api/studies": {
     /** List studies */
     get: operations["listStudies"];
@@ -77,6 +99,46 @@ export interface components {
     };
     SubscriptionDto: components["schemas"]["CreateSubscriptionDto"] & {
       id?: string;
+    };
+    NotifyDto: {
+      segment?: {
+        [key: string]: unknown;
+      };
+      title?: string;
+      body?: string;
+      url?: string;
+      ttl?: number;
+    };
+    CampaignMessageDto: {
+      title: string;
+      body: string;
+      url?: string;
+    };
+    CampaignCreateDto: {
+      name: string;
+      studyId?: string;
+      segment?: {
+        [key: string]: unknown;
+      };
+      throttlePerMinute?: number;
+      message: components["schemas"]["CampaignMessageDto"];
+    };
+    CampaignDto: components["schemas"]["CampaignCreateDto"] & ({
+      id: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** @enum {string} */
+      status: "draft" | "launched" | "stopped";
+    });
+    NotificationEventDto: {
+      id: string;
+      campaignId: string;
+      subscriptionId?: string;
+      /** @enum {string} */
+      status: "sent" | "failed";
+      error?: string;
+      /** Format: date-time */
+      createdAt: string;
     };
     CreateStudyDto: {
       title: string;
@@ -192,6 +254,119 @@ export interface operations {
       /** @description Deleted */
       204: {
         content: never;
+      };
+    };
+  };
+  /** Send notification immediately */
+  notifyNow: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NotifyDto"];
+      };
+    };
+    responses: {
+      /** @description Result */
+      200: {
+        content: {
+          "application/json": {
+            sent?: number;
+          };
+        };
+      };
+    };
+  };
+  /** List campaigns */
+  listCampaigns: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CampaignDto"][];
+        };
+      };
+    };
+  };
+  /** Create campaign */
+  createCampaign: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CampaignCreateDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["CampaignDto"];
+        };
+      };
+    };
+  };
+  /** Get campaign */
+  getCampaign: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CampaignDto"];
+        };
+      };
+    };
+  };
+  /** Stop campaign */
+  stopCampaign: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Stopped */
+      200: {
+        content: {
+          "application/json": {
+            stopped?: boolean;
+          };
+        };
+      };
+    };
+  };
+  /** Launch campaign */
+  launchCampaign: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Result */
+      200: {
+        content: {
+          "application/json": {
+            launched?: number;
+          };
+        };
+      };
+    };
+  };
+  /** List campaign events */
+  listCampaignEvents: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NotificationEventDto"][];
+        };
       };
     };
   };
