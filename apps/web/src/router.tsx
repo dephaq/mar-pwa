@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Studies from './pages/Studies';
 import Rewards from './pages/Rewards';
 import Support from './pages/Support';
+import { t } from './i18n';
 import Privacy from './pages/Privacy';
 import Consent from './pages/Consent';
 
@@ -19,11 +20,11 @@ const rootRoute = new RootRoute({
   component: () => (
     <div>
       <nav style={{ display: 'flex', gap: '1rem' }}>
-        <Link to="/home">Главная</Link>
-        <Link to="/profile">Профиль</Link>
-        <Link to="/studies">Исследования</Link>
-        <Link to="/rewards">Награды</Link>
-        <Link to="/support">Поддержка</Link>
+        <Link to="/home">{t('sections.home')}</Link>
+        <Link to="/profile">{t('sections.profile')}</Link>
+        <Link to="/studies">{t('sections.studies')}</Link>
+        <Link to="/rewards">{t('sections.rewards')}</Link>
+        <Link to="/support">{t('sections.support')}</Link>
       </nav>
       <Outlet />
     </div>

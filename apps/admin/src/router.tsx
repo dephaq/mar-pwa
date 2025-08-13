@@ -13,13 +13,14 @@ import EditStudy from './routes/studies/EditStudy';
 import CampaignsList from './routes/campaigns';
 import NewCampaign from './routes/campaigns/NewCampaign';
 import ViewCampaign from './routes/campaigns/ViewCampaign';
+import { t } from './i18n';
 
 const rootRoute = new RootRoute({
   component: () => (
     <div>
       <nav style={{ display: 'flex', gap: '1rem' }}>
-        <Link to="/studies">Исследования</Link>
-        <Link to="/campaigns">Кампании</Link>
+        <Link to="/studies">{t('sections.studies')}</Link>
+        <Link to="/campaigns">{t('sections.campaigns')}</Link>
       </nav>
       <Outlet />
       <footer style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>

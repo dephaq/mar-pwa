@@ -1,0 +1,62 @@
+{
+  "common": {
+    "saved": "Сохранено",
+    "error": "Ошибка"
+  },
+  "sections": {
+    "studies": "Исследования",
+    "campaigns": "Кампании",
+    "audience": "Аудитория"
+  },
+  "studies": {
+    "list": {
+      "create": "Создать",
+      "edit": "Редактировать"
+    },
+    "form": {
+      "title": "Тема",
+      "link": "Ссылка",
+      "description": "Описание",
+      "durationMin": "Длительность (мин)",
+      "rewardCents": "Вознаграждение (¢)",
+      "deadline": "Дедлайн",
+      "targeting": "Таргетинг (JSON)",
+      "quotas": "Квоты (JSON)",
+      "save": "Сохранить",
+      "preview": "Предпросмотр",
+      "errors": {
+        "invalidJson": "Некорректный JSON"
+      }
+    }
+  },
+  "campaigns": {
+    "list": {
+      "new": "Новая",
+      "name": "Имя",
+      "status": "Статус",
+      "created": "Создана",
+      "view": "Просмотр",
+      "launch": "Запустить",
+      "stop": "Остановить"
+    },
+    "new": {
+      "heading": "Новая кампания"
+    },
+    "form": {
+      "name": "Имя",
+      "studyId": "ID исследования",
+      "segment": "Сегмент (JSON)",
+      "throttlePerMinute": "Лимит в минуту",
+      "title": "Заголовок",
+      "body": "Текст",
+      "url": "URL",
+      "save": "Сохранить"
+    },
+    "view": {
+      "status": "Статус",
+      "events": "События",
+      "launch": "Запустить",
+      "stop": "Остановить"
+    }
+  }
+}

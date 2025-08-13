@@ -1,0 +1,62 @@
+{
+  "common": {
+    "saved": "Saved",
+    "error": "Error"
+  },
+  "sections": {
+    "studies": "Studies",
+    "campaigns": "Campaigns",
+    "audience": "Audience"
+  },
+  "studies": {
+    "list": {
+      "create": "Create",
+      "edit": "Edit"
+    },
+    "form": {
+      "title": "Title",
+      "link": "Link",
+      "description": "Description",
+      "durationMin": "Duration (min)",
+      "rewardCents": "Reward (cents)",
+      "deadline": "Deadline",
+      "targeting": "Targeting (JSON)",
+      "quotas": "Quotas (JSON)",
+      "save": "Save",
+      "preview": "Preview",
+      "errors": {
+        "invalidJson": "Invalid JSON"
+      }
+    }
+  },
+  "campaigns": {
+    "list": {
+      "new": "New",
+      "name": "Name",
+      "status": "Status",
+      "created": "Created",
+      "view": "View",
+      "launch": "Launch",
+      "stop": "Stop"
+    },
+    "new": {
+      "heading": "New campaign"
+    },
+    "form": {
+      "name": "Name",
+      "studyId": "Study ID",
+      "segment": "Segment (JSON)",
+      "throttlePerMinute": "Throttle per minute",
+      "title": "Title",
+      "body": "Body",
+      "url": "URL",
+      "save": "Save"
+    },
+    "view": {
+      "status": "Status",
+      "events": "Events",
+      "launch": "Launch",
+      "stop": "Stop"
+    }
+  }
+}

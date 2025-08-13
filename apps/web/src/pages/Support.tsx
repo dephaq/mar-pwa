@@ -1,3 +1,5 @@
+import { t } from '../i18n';
+
 export default function Support() {
-  return <h2>Поддержка</h2>;
+  return <h2>{t('sections.support')}</h2>;
 }

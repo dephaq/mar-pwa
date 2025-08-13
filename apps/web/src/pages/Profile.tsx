@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { components } from '@mar/shared';
+import { t } from '../i18n';
 import consentText from '../../../../legal/consent_v1.md?raw';
 
 type Profile = components['schemas']['ProfileDto'];
@@ -10,7 +11,7 @@ export default function ProfilePage() {
   async function enableNotifications() {
     const perm = await Notification.requestPermission();
     if (perm !== 'granted') {
-      alert('Отказано');
+      alert(t('common.error'));
       return;
     }
     const registration = await navigator.serviceWorker.ready;
@@ -24,7 +25,7 @@ export default function ProfilePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sub),
     });
-    alert('Подписка включена');
+    alert(t('common.saved'));
   }
 
   function urlBase64ToUint8Array(base64String: string) {
@@ -37,7 +38,7 @@ export default function ProfilePage() {
   const [consent, setConsent] = useState(false);
   const [consentStatus, setConsentStatus] = useState('');
 
-  async function handleConsent(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleConsent(e: ChangeEvent<HTMLInputElement>) {
     const checked = e.target.checked;
     setConsent(checked);
     if (!checked) {
@@ -46,10 +47,7 @@ export default function ProfilePage() {
     }
     try {
       const enc = new TextEncoder();
-      const hashBuffer = await crypto.subtle.digest(
-        'SHA-256',
-        enc.encode(consentText),
-      );
+      const hashBuffer = await crypto.subtle.digest('SHA-256', enc.encode(consentText));
       const hashArray = Array.from(new Uint8Array(hashBuffer))
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
@@ -70,10 +68,12 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <h2>Профиль</h2>
+      <h2>{t('sections.profile')}</h2>
+
       <p>
         <Link to="/legal/privacy">Политика приватности</Link>
       </p>
+
       <div>
         <label>
           <input type="checkbox" checked={consent} onChange={handleConsent} /> Согласен с
@@ -81,9 +81,12 @@ export default function ProfilePage() {
         </label>
         {consentStatus && <div>{consentStatus}</div>}
       </div>
-      <button onClick={enableNotifications}>Включить уведомления</button>
+
+      <button onClick={enableNotifications}>{t('common.enableNotifications')}</button>
+
       <ProfileForm />
-      <h3>Прескрин</h3>
+
+      <h3>{t('sections.prescreen')}</h3>
       <PrescreenForm />
     </div>
   );
@@ -117,7 +120,7 @@ function ProfileForm() {
     setErrors((e) => ({ ...e, [key]: error }));
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     const key = name as keyof Profile;
     const parsed = key === 'age' ? Number(value) : value;
@@ -126,7 +129,7 @@ function ProfileForm() {
   }
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    const tmr = setTimeout(() => {
       if (Object.values(errors).every((e) => !e)) {
         fetch('/api/profile', {
           method: 'PUT',
@@ -135,7 +138,7 @@ function ProfileForm() {
         }).catch(() => {});
       }
     }, 500);
-    return () => clearTimeout(t);
+    return () => clearTimeout(tmr);
   }, [profile, errors]);
 
   return (
@@ -150,12 +153,7 @@ function ProfileForm() {
       <div>
         <label>
           Возраст
-          <input
-            name="age"
-            type="number"
-            value={profile.age}
-            onChange={handleChange}
-          />
+          <input name="age" type="number" value={profile.age} onChange={handleChange} />
         </label>
         {errors.age && <div>{errors.age}</div>}
       </div>
@@ -176,22 +174,14 @@ function ProfileForm() {
       <div>
         <label>
           Профессия
-          <input
-            name="profession"
-            value={profile.profession}
-            onChange={handleChange}
-          />
+          <input name="profession" value={profile.profession} onChange={handleChange} />
         </label>
         {errors.profession && <div>{errors.profession}</div>}
       </div>
       <div>
         <label>
           Контакты
-          <input
-            name="contacts"
-            value={profile.contacts}
-            onChange={handleChange}
-          />
+          <input name="contacts" value={profile.contacts} onChange={handleChange} />
         </label>
         {errors.contacts && <div>{errors.contacts}</div>}
       </div>
@@ -222,7 +212,7 @@ function PrescreenBlockItem({ block }: { block: PrescreenBlock }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    const tmr = setTimeout(() => {
       if (!answer) {
         setError('Обязательное поле');
         return;
@@ -234,7 +224,7 @@ function PrescreenBlockItem({ block }: { block: PrescreenBlock }) {
         body: JSON.stringify({ answer }),
       }).catch(() => setError('Ошибка сохранения'));
     }, 500);
-    return () => clearTimeout(t);
+    return () => clearTimeout(tmr);
   }, [answer, block.id]);
 
   return (

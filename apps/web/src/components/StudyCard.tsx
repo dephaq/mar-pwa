@@ -1,4 +1,5 @@
 import { Study } from '../types';
+import { t } from '../i18n';
 
 interface Props {
   study: Study;
@@ -8,10 +9,10 @@ interface Props {
 }
 
 const statusLabels: Record<Study['status'], string> = {
-  sent: 'Новое',
-  opened: 'Открыто',
-  started: 'В процессе',
-  finished: 'Завершено',
+  sent: t('studies.card.statusLabels.sent'),
+  opened: t('studies.card.statusLabels.opened'),
+  started: t('studies.card.statusLabels.started'),
+  finished: t('studies.card.statusLabels.finished'),
 };
 
 export default function StudyCard({ study, onOpen, onStart, onFinish }: Props) {
@@ -26,10 +27,18 @@ export default function StudyCard({ study, onOpen, onStart, onFinish }: Props) {
       }}
     >
       <h3>{study.topic}</h3>
-      <p>Длительность: {study.duration} мин</p>
-      <p>Вознаграждение: {study.reward} ₽</p>
-      <p>Дедлайн: {study.deadline}</p>
-      <p>Статус: {statusLabels[study.status]}</p>
+      <p>
+        {t('studies.card.duration')}: {study.duration} {t('studies.card.minutes')}
+      </p>
+      <p>
+        {t('studies.card.reward')}: {study.reward} ₽
+      </p>
+      <p>
+        {t('studies.card.deadline')}: {study.deadline}
+      </p>
+      <p>
+        {t('studies.card.status')}: {statusLabels[study.status]}
+      </p>
       {(study.status === 'sent' || study.status === 'opened') && (
         <button
           onClick={(e) => {
@@ -37,7 +46,7 @@ export default function StudyCard({ study, onOpen, onStart, onFinish }: Props) {
             onStart(study.id);
           }}
         >
-          Принять участие
+          {t('common.joinStudy')}
         </button>
       )}
       {study.status === 'started' && (
@@ -47,7 +56,7 @@ export default function StudyCard({ study, onOpen, onStart, onFinish }: Props) {
             onFinish(study.id);
           }}
         >
-          Завершить
+          {t('studies.card.finish')}
         </button>
       )}
     </div>
