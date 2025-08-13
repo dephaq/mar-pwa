@@ -3,6 +3,7 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
   "/api/subscriptions": {
     /** Create subscription */
@@ -21,6 +22,8 @@ export interface paths {
   "/api/studies/{id}": {
     /** Get study by id */
     get: operations["getStudy"];
+    /** Update study */
+    put: operations["updateStudy"];
   };
   "/api/invitations/launch": {
     /** Launch invitations */
@@ -39,9 +42,9 @@ export interface paths {
     get: operations["exportAudience"];
   };
   "/api/audience/segments": {
-    /** List segments */
+    /** List saved segments */
     get: operations["listSegments"];
-    /** Create segment */
+    /** Create new segment */
     post: operations["createSegment"];
   };
   "/api/profile": {
@@ -65,30 +68,41 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     SubscriptionKeysDto: {
-      p256dh: string;
-      auth: string;
+      p256dh?: string;
+      auth?: string;
     };
     CreateSubscriptionDto: {
-      endpoint: string;
-      keys: components["schemas"]["SubscriptionKeysDto"];
+      endpoint?: string;
+      keys?: components["schemas"]["SubscriptionKeysDto"];
     };
     SubscriptionDto: components["schemas"]["CreateSubscriptionDto"] & {
-      id: string;
+      id?: string;
     };
     CreateStudyDto: {
       title: string;
+      link: string;
       description?: string;
+      durationMin?: number;
+      rewardCents?: number;
+      /** Format: date-time */
+      deadlineAt?: string;
+      targeting?: {
+        [key: string]: unknown;
+      };
+      quotas?: {
+        [key: string]: unknown;
+      };
     };
     StudyDto: components["schemas"]["CreateStudyDto"] & {
       id: string;
     };
     LaunchInvitationDto: {
-      studyId: string;
+      studyId?: string;
       segment?: string;
       quota?: number;
     };
     LaunchInvitationResponseDto: {
-      launched: number;
+      launched?: number;
     };
     AudienceFilterDto: {
       q?: string;
@@ -99,27 +113,27 @@ export interface components {
       segmentId?: string;
     };
     AudienceDto: {
-      id: string;
-      email: string;
-      name: string;
-      age: number;
-      gender: string;
-      city: string;
+      id?: string;
+      email?: string;
+      name?: string;
+      age?: number;
+      gender?: string;
+      city?: string;
     };
     CreateSegmentDto: {
-      name: string;
-      filter: components["schemas"]["AudienceFilterDto"];
+      name?: string;
+      filter?: components["schemas"]["AudienceFilterDto"];
     };
     SegmentDto: components["schemas"]["CreateSegmentDto"] & {
-      id: string;
+      id?: string;
     };
     ProfileDto: {
-      name: string;
-      age: number;
-      gender: string;
-      city: string;
-      profession: string;
-      contacts: string;
+      name?: string;
+      age?: number;
+      gender?: string;
+      city?: string;
+      profession?: string;
+      contacts?: string;
     };
     UpdateProfileDto: {
       name?: string;
@@ -130,12 +144,12 @@ export interface components {
       contacts?: string;
     };
     PrescreenBlockDto: {
-      id: string;
-      question: string;
-      answer: string;
+      id?: string;
+      question?: string;
+      answer?: string;
     };
     UpdatePrescreenBlockDto: {
-      answer: string;
+      answer?: string;
     };
   };
   responses: never;
@@ -150,6 +164,7 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+
   /** Create subscription */
   createSubscription: {
     requestBody: {
@@ -223,6 +238,27 @@ export interface operations {
       };
     };
   };
+  /** Update study */
+  updateStudy: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStudyDto"];
+      };
+    };
+    responses: {
+      /** @description Study */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StudyDto"];
+        };
+      };
+    };
+  };
   /** Launch invitations */
   launchInvitations: {
     requestBody: {
@@ -242,7 +278,7 @@ export interface operations {
   /** Export invitations CSV */
   exportInvitations: {
     responses: {
-      /** @description CSV data */
+      /** @description CSV */
       200: {
         content: {
           "text/csv": string;
@@ -263,7 +299,7 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Array of audience profiles */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["AudienceDto"][];
@@ -275,16 +311,11 @@ export interface operations {
   exportAudience: {
     parameters: {
       query?: {
-        q?: string;
-        city?: string;
-        gender?: string;
-        prescreenQuestion?: string;
-        prescreenAnswer?: string;
-        segmentId?: string;
+        segmentId?: string | null;
       };
     };
     responses: {
-      /** @description CSV data */
+      /** @description CSV */
       200: {
         content: {
           "text/csv": string;
@@ -292,10 +323,10 @@ export interface operations {
       };
     };
   };
-  /** List segments */
+  /** List saved segments */
   listSegments: {
     responses: {
-      /** @description Array of segments */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SegmentDto"][];
@@ -303,7 +334,7 @@ export interface operations {
       };
     };
   };
-  /** Create segment */
+  /** Create new segment */
   createSegment: {
     requestBody: {
       content: {

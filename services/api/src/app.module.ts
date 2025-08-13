@@ -6,11 +6,7 @@ import { ProfileModule } from './profile/profile.module';
 import { PrescreenModule } from './prescreen/prescreen.module';
 
 @Module({
-  imports: [
-    AudienceModule,
-    ProfileModule,
-    PrescreenModule,
-  ],
+  imports: [AudienceModule, ProfileModule, PrescreenModule],
   controllers: [AppController],
   providers: [AppService],
 })
