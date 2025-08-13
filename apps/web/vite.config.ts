@@ -12,7 +12,8 @@ export default defineConfig({
       manifest: {
         name: 'MAR',
         short_name: 'MAR',
-        start_url: '/',
+        start_url: '/mar-pwa/',
+        scope: '/mar-pwa/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#0077cc',
