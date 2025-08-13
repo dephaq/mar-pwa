@@ -107,6 +107,109 @@ paths:
             text/csv:
               schema:
                 type: string
+  /api/audience:
+    get:
+      summary: Search audience
+      operationId: searchAudience
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: city
+          in: query
+          schema:
+            type: string
+        - name: gender
+          in: query
+          schema:
+            type: string
+        - name: prescreenQuestion
+          in: query
+          schema:
+            type: string
+        - name: prescreenAnswer
+          in: query
+          schema:
+            type: string
+        - name: segmentId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Array of audience profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AudienceDto'
+  /api/audience/export.csv:
+    get:
+      summary: Export audience CSV
+      operationId: exportAudience
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: city
+          in: query
+          schema:
+            type: string
+        - name: gender
+          in: query
+          schema:
+            type: string
+        - name: prescreenQuestion
+          in: query
+          schema:
+            type: string
+        - name: prescreenAnswer
+          in: query
+          schema:
+            type: string
+        - name: segmentId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CSV data
+          content:
+            text/csv:
+              schema:
+                type: string
+  /api/audience/segments:
+    get:
+      summary: List segments
+      operationId: listSegments
+      responses:
+        '200':
+          description: Array of segments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SegmentDto'
+    post:
+      summary: Create segment
+      operationId: createSegment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentDto'
 components:
   schemas:
     SubscriptionKeysDto:
@@ -165,3 +268,50 @@ components:
       properties:
         launched:
           type: number
+    AudienceFilterDto:
+      type: object
+      properties:
+        q:
+          type: string
+        city:
+          type: string
+        gender:
+          type: string
+        prescreenQuestion:
+          type: string
+        prescreenAnswer:
+          type: string
+        segmentId:
+          type: string
+    AudienceDto:
+      type: object
+      required: [id, email, name, age, gender, city]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        city:
+          type: string
+    CreateSegmentDto:
+      type: object
+      required: [name, filter]
+      properties:
+        name:
+          type: string
+        filter:
+          $ref: '#/components/schemas/AudienceFilterDto'
+    SegmentDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateSegmentDto'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string

@@ -31,6 +31,20 @@ export interface paths {
     /** Export invitations CSV */
     get: operations["exportInvitations"];
   };
+  "/api/audience": {
+    /** Search audience */
+    get: operations["searchAudience"];
+  };
+  "/api/audience/export.csv": {
+    /** Export audience CSV */
+    get: operations["exportAudience"];
+  };
+  "/api/audience/segments": {
+    /** List segments */
+    get: operations["listSegments"];
+    /** Create segment */
+    post: operations["createSegment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -62,6 +76,29 @@ export interface components {
     };
     LaunchInvitationResponseDto: {
       launched: number;
+    };
+    AudienceFilterDto: {
+      q?: string;
+      city?: string;
+      gender?: string;
+      prescreenQuestion?: string;
+      prescreenAnswer?: string;
+      segmentId?: string;
+    };
+    AudienceDto: {
+      id: string;
+      email: string;
+      name: string;
+      age: number;
+      gender: string;
+      city: string;
+    };
+    CreateSegmentDto: {
+      name: string;
+      filter: components["schemas"]["AudienceFilterDto"];
+    };
+    SegmentDto: components["schemas"]["CreateSegmentDto"] & {
+      id: string;
     };
   };
   responses: never;
@@ -173,6 +210,75 @@ export interface operations {
       200: {
         content: {
           "text/csv": string;
+        };
+      };
+    };
+  };
+  /** Search audience */
+  searchAudience: {
+    parameters: {
+      query?: {
+        q?: string;
+        city?: string;
+        gender?: string;
+        prescreenQuestion?: string;
+        prescreenAnswer?: string;
+        segmentId?: string;
+      };
+    };
+    responses: {
+      /** @description Array of audience profiles */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AudienceDto"][];
+        };
+      };
+    };
+  };
+  /** Export audience CSV */
+  exportAudience: {
+    parameters: {
+      query?: {
+        q?: string;
+        city?: string;
+        gender?: string;
+        prescreenQuestion?: string;
+        prescreenAnswer?: string;
+        segmentId?: string;
+      };
+    };
+    responses: {
+      /** @description CSV data */
+      200: {
+        content: {
+          "text/csv": string;
+        };
+      };
+    };
+  };
+  /** List segments */
+  listSegments: {
+    responses: {
+      /** @description Array of segments */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentDto"][];
+        };
+      };
+    };
+  };
+  /** Create segment */
+  createSegment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSegmentDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["SegmentDto"];
         };
       };
     };
