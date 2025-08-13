@@ -7,7 +7,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       <title>MAR – Исследования</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icon-192x192.png" />
+  <!-- Use dedicated Apple touch icon for bigger logo -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <style>
     body {
       margin: 0;
@@ -78,6 +79,9 @@
       flex-grow: 1;
       overflow-y: auto;
       padding: 20px;
+      /* Add safe-area padding for iOS devices and extra margin to avoid edges */
+      padding-left: calc(20px + env(safe-area-inset-left));
+      padding-right: calc(20px + env(safe-area-inset-right));
       background-color: #ffffff;
     }
     /* Page styles */
@@ -192,7 +196,7 @@
   <div class="app-container">
     <!-- Sidebar -->
     <nav class="sidenav" id="sidenav">
-      <div class="logo">MAR Consult</div>
+      <div class="logo">MAR</div>
       <!-- Close button for mobile -->
       <span class="close-btn" onclick="toggleNav()">×</span>
       <div class="menu-item active" data-page="home" onclick="navigate(this)">Главная</div>
@@ -221,8 +225,12 @@
         <!-- Questionnaire page -->
         <div id="page-questionnaire" class="page">
           <h2>Моя анкета</h2>
-          <p>Заполните текущую анкету. После завершения вы сможете вернуться к приложению для участия в других исследованиях.</p>
-          <iframe id="survey-frame" src="https://marsurvey.ru/L3322/cgi-bin/ciwweb.pl?hid_studyname=L3322&hid_pagenum=0&hid_test_mode=1" title="Опрос"></iframe>
+          <!-- Collapse description to avoid taking space on mobile -->
+          <details>
+            <summary>Показать описание</summary>
+            <p>Заполните текущую анкету. После завершения вы сможете вернуться к приложению для участия в других исследованиях.</p>
+          </details>
+          <iframe id="survey-frame" src="https://marsurvey.ru/L3322/cgi-bin/ciwweb.pl?hid_studyname=L3322&amp;hid_pagenum=0&amp;hid_test_mode=1" title="Опрос"></iframe>
         </div>
         <!-- Profile page -->
         <div id="page-profile" class="page">
@@ -236,6 +244,23 @@
             <div class="form-group">
               <label for="age">Возраст</label>
               <input type="number" id="age" min="14" max="100" />
+            </div>
+            <div class="form-group">
+              <label for="profession">Профессия</label>
+              <input type="text" id="profession" />
+            </div>
+            <div class="form-group">
+              <label for="gender">Пол</label>
+              <select id="gender">
+                <option value="">Не выбран</option>
+                <option>Мужской</option>
+                <option>Женский</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="city">Город</label>
+              <input type="text" id="city" />
             </div>
             <div class="form-group">
               <label for="email">Email</label>
@@ -306,6 +331,12 @@
         activePage.classList.add('active');
         document.getElementById('page-title').textContent = elem.textContent;
         // Если это анкета, изменить стиль контента для iframe
+      }
+
+      // Close the sidebar on small screens after choosing a menu item
+      const nav = document.getElementById('sidenav');
+      if (window.innerWidth <= 768 && nav.classList.contains('open')) {
+        nav.classList.remove('open');
       }
     }
 
