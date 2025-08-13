@@ -1,0 +1,39 @@
+%% MAR PWA Information Architecture
+%% Themes: light/dark; base typography 16-18px with 24-28px headers; WCAG AA+ contrast.
+%% Safe-area: use env(safe-area-inset-*) padding to protect content from gestures.
+graph TD
+    AppShell[App Shell]
+    NavMobile[Mobile: AppBar + Drawer]
+    NavDesktop[Desktop: Sidebar]
+    AppShell --> NavMobile
+    AppShell --> NavDesktop
+
+    AppShell --> Home[Главная]
+    AppShell --> MyStudies[Мои исследования]
+    AppShell --> Profile[Профиль]
+    AppShell --> Rewards[Награды]
+    AppShell --> Support[Поддержка]
+
+    %% States
+    Home --> HLoading[loading]
+    Home --> HEmpty[empty]
+    Home --> HError[error]
+
+    MyStudies --> SLoading[loading]
+    MyStudies --> SEmpty[empty]
+    MyStudies --> SError[error]
+
+    Profile --> PLoading[loading]
+    Profile --> PEmpty[empty]
+    Profile --> PError[error]
+
+    Rewards --> RLoading[loading]
+    Rewards --> REmpty[empty]
+    Rewards --> RError[error]
+
+    Support --> SupLoading[loading]
+    Support --> SupEmpty[empty]
+    Support --> SupError[error]
+
+    SafeArea[Safe-area inset applied]
+    AppShell --- SafeArea

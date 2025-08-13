@@ -1,0 +1,42 @@
+%% MAR PWA Main Flows
+%% Themes: light/dark; base typography 16-18px with 24-28px headers; WCAG AA+ contrast.
+%% Navigation adapts: Drawer on mobile, Sidebar on desktop. Safe-area insets protect content.
+flowchart TD
+    Start((Start))
+    Onboard[Welcome & Consent]
+    Profile[Profile]
+    Prescreen[Prescreen]
+    Invitations[Invitations Feed]
+    Survey[Survey Iframe]
+    Rewards[Rewards]
+
+    Start --> Onboard
+    Onboard --> Profile
+    Profile --> Prescreen
+    Prescreen --> Invitations
+    Invitations --> Survey
+    Survey --> Rewards
+
+    %% States for key steps
+    Onboard --> OnboardLoading[loading]
+    Onboard --> OnboardEmpty[empty]
+    Onboard --> OnboardError[error]
+
+    Profile --> ProfileLoading[loading]
+    Profile --> ProfileEmpty[empty]
+    Profile --> ProfileError[error]
+
+    Invitations --> InvLoading[loading]
+    Invitations --> InvEmpty[empty]
+    Invitations --> InvError[error]
+
+    Survey --> SurveyLoading[loading]
+    Survey --> SurveyEmpty[empty]
+    Survey --> SurveyError[error]
+
+    Rewards --> RewardsLoading[loading]
+    Rewards --> RewardsEmpty[empty]
+    Rewards --> RewardsError[error]
+
+    NavNote[Adaptive navigation & safe-area applied]
+    Start --- NavNote
