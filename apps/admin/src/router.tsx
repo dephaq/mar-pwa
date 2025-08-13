@@ -23,6 +23,14 @@ const rootRoute = new RootRoute({
         <Link to="/campaigns">{t('sections.campaigns')}</Link>
       </nav>
       <Outlet />
+      <footer style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+        <a href="/#/legal/privacy" target="_blank" rel="noopener noreferrer">
+          Privacy
+        </a>
+        <a href="/#/legal/consent" target="_blank" rel="noopener noreferrer">
+          Consent
+        </a>
+      </footer>
     </div>
   ),
 });

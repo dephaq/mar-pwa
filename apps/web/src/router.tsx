@@ -13,6 +13,8 @@ import Studies from './pages/Studies';
 import Rewards from './pages/Rewards';
 import Support from './pages/Support';
 import { t } from './i18n';
+import Privacy from './pages/Privacy';
+import Consent from './pages/Consent';
 
 const rootRoute = new RootRoute({
   component: () => (
@@ -59,12 +61,26 @@ const supportRoute = new Route({
   component: Support,
 });
 
+const privacyRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/legal/privacy',
+  component: Privacy,
+});
+
+const consentRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/legal/consent',
+  component: Consent,
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   profileRoute,
   studiesRoute,
   rewardsRoute,
   supportRoute,
+  privacyRoute,
+  consentRoute,
 ]);
 
 export const router = new Router({

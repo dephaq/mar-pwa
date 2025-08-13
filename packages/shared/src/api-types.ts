@@ -17,6 +17,10 @@ export interface paths {
     /** Send notification immediately */
     post: operations["notifyNow"];
   };
+  "/api/consents": {
+    /** Store user consent */
+    post: operations["createConsent"];
+  };
   "/api/campaigns": {
     /** List campaigns */
     get: operations["listCampaigns"];
@@ -99,6 +103,12 @@ export interface components {
     };
     SubscriptionDto: components["schemas"]["CreateSubscriptionDto"] & {
       id?: string;
+    };
+    ConsentDto: {
+      version: string;
+      textHash: string;
+      /** Format: date-time */
+      givenAt: string;
     };
     NotifyDto: {
       segment?: {
@@ -272,6 +282,20 @@ export interface operations {
             sent?: number;
           };
         };
+      };
+    };
+  };
+  /** Store user consent */
+  createConsent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ConsentDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: never;
       };
     };
   };
