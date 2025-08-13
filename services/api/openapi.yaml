@@ -107,6 +107,69 @@ paths:
             text/csv:
               schema:
                 type: string
+  /api/profile:
+    get:
+      summary: Get profile
+      operationId: getProfile
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+    put:
+      summary: Update profile
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileDto'
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+  /api/prescreen:
+    get:
+      summary: Get prescreen blocks
+      operationId: getPrescreen
+      responses:
+        '200':
+          description: Array of prescreen blocks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrescreenBlockDto'
+  /api/prescreen/{id}:
+    put:
+      summary: Update prescreen block
+      operationId: updatePrescreenBlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePrescreenBlockDto'
+      responses:
+        '200':
+          description: Prescreen block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescreenBlockDto'
 components:
   schemas:
     SubscriptionKeysDto:
@@ -165,3 +228,50 @@ components:
       properties:
         launched:
           type: number
+    ProfileDto:
+      type: object
+      required: [name, age, gender, city, profession, contacts]
+      properties:
+        name:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        city:
+          type: string
+        profession:
+          type: string
+        contacts:
+          type: string
+    UpdateProfileDto:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        city:
+          type: string
+        profession:
+          type: string
+        contacts:
+          type: string
+    PrescreenBlockDto:
+      type: object
+      required: [id, question, answer]
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        answer:
+          type: string
+    UpdatePrescreenBlockDto:
+      type: object
+      required: [answer]
+      properties:
+        answer:
+          type: string

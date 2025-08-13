@@ -31,6 +31,20 @@ export interface paths {
     /** Export invitations CSV */
     get: operations["exportInvitations"];
   };
+  "/api/profile": {
+    /** Get profile */
+    get: operations["getProfile"];
+    /** Update profile */
+    put: operations["updateProfile"];
+  };
+  "/api/prescreen": {
+    /** Get prescreen blocks */
+    get: operations["getPrescreen"];
+  };
+  "/api/prescreen/{id}": {
+    /** Update prescreen block */
+    put: operations["updatePrescreenBlock"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -62,6 +76,30 @@ export interface components {
     };
     LaunchInvitationResponseDto: {
       launched: number;
+    };
+    ProfileDto: {
+      name: string;
+      age: number;
+      gender: string;
+      city: string;
+      profession: string;
+      contacts: string;
+    };
+    UpdateProfileDto: {
+      name?: string;
+      age?: number;
+      gender?: string;
+      city?: string;
+      profession?: string;
+      contacts?: string;
+    };
+    PrescreenBlockDto: {
+      id: string;
+      question: string;
+      answer: string;
+    };
+    UpdatePrescreenBlockDto: {
+      answer: string;
     };
   };
   responses: never;
@@ -173,6 +211,65 @@ export interface operations {
       200: {
         content: {
           "text/csv": string;
+        };
+      };
+    };
+  };
+  /** Get profile */
+  getProfile: {
+    responses: {
+      /** @description Profile */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProfileDto"];
+        };
+      };
+    };
+  };
+  /** Update profile */
+  updateProfile: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProfileDto"];
+      };
+    };
+    responses: {
+      /** @description Profile */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProfileDto"];
+        };
+      };
+    };
+  };
+  /** Get prescreen blocks */
+  getPrescreen: {
+    responses: {
+      /** @description Array of prescreen blocks */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PrescreenBlockDto"][];
+        };
+      };
+    };
+  };
+  /** Update prescreen block */
+  updatePrescreenBlock: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePrescreenBlockDto"];
+      };
+    };
+    responses: {
+      /** @description Prescreen block */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PrescreenBlockDto"];
         };
       };
     };
