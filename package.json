@@ -1,0 +1,5 @@
+{
+  "name": "mar-pwa-monorepo",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*", "services/*"]
+}
