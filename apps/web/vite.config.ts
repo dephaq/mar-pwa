@@ -28,11 +28,9 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        clientsClaim: true,
-        skipWaiting: true,
-        navigateFallback: '/offline.html',
-      },
+      srcDir: 'src',
+      filename: 'sw.ts',
+      strategies: 'injectManifest',
     }),
   ],
 });
