@@ -21,4 +21,12 @@ export class StudiesService {
     if (!study) throw new NotFoundException('Study not found');
     return study;
   }
+
+  update(id: string, dto: CreateStudyDto): StudyDto {
+    const index = this.studies.findIndex((s) => s.id === id);
+    if (index === -1) throw new NotFoundException('Study not found');
+    const updated: StudyDto = { id, ...dto };
+    this.studies[index] = updated;
+    return updated;
+  }
 }

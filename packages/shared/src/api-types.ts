@@ -22,6 +22,8 @@ export interface paths {
   "/api/studies/{id}": {
     /** Get study by id */
     get: operations["getStudy"];
+    /** Update study */
+    put: operations["updateStudy"];
   };
   "/api/invitations/launch": {
     /** Launch invitations */
@@ -48,9 +50,23 @@ export interface components {
     SubscriptionDto: components["schemas"]["CreateSubscriptionDto"] & {
       id: string;
     };
+    TargetAttributeDto: {
+      key: string;
+      value: string;
+    };
+    QuotaDto: {
+      attributes: components["schemas"]["TargetAttributeDto"][];
+      limit: number;
+    };
     CreateStudyDto: {
       title: string;
-      description?: string;
+      link: string;
+      duration: number;
+      reward: number;
+      /** Format: date-time */
+      deadline: string;
+      targeting: components["schemas"]["TargetAttributeDto"][];
+      quotas: components["schemas"]["QuotaDto"][];
     };
     StudyDto: components["schemas"]["CreateStudyDto"] & {
       id: string;
@@ -143,6 +159,27 @@ export interface operations {
     };
     responses: {
       /** @description Study */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StudyDto"];
+        };
+      };
+    };
+  };
+  /** Update study */
+  updateStudy: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStudyDto"];
+      };
+    };
+    responses: {
+      /** @description Study updated */
       200: {
         content: {
           "application/json": components["schemas"]["StudyDto"];

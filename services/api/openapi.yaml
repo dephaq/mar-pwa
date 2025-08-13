@@ -79,6 +79,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudyDto'
+    put:
+      summary: Update study
+      operationId: updateStudy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudyDto'
+      responses:
+        '200':
+          description: Study updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyDto'
   /api/invitations/launch:
     post:
       summary: Launch invitations
@@ -133,14 +155,47 @@ components:
           properties:
             id:
               type: string
+    TargetAttributeDto:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    QuotaDto:
+      type: object
+      required: [attributes, limit]
+      properties:
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetAttributeDto'
+        limit:
+          type: number
     CreateStudyDto:
       type: object
-      required: [title]
+      required: [title, link, duration, reward, deadline, targeting, quotas]
       properties:
         title:
           type: string
-        description:
+        link:
           type: string
+        duration:
+          type: number
+        reward:
+          type: number
+        deadline:
+          type: string
+          format: date-time
+        targeting:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetAttributeDto'
+        quotas:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuotaDto'
     StudyDto:
       allOf:
         - $ref: '#/components/schemas/CreateStudyDto'

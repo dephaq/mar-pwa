@@ -2,6 +2,8 @@
   "name": "@mar/shared",
   "version": "0.0.0",
   "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "generate": "openapi-typescript ../../services/api/openapi.yaml -o src/api-types.ts",
     "typecheck": "tsc --noEmit"
