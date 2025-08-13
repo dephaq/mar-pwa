@@ -31,6 +31,20 @@ export interface paths {
     /** Export invitations CSV */
     get: operations["exportInvitations"];
   };
+  "/api/audience": {
+    /** Search audience */
+    get: operations["searchAudience"];
+  };
+  "/api/segments": {
+    /** List segments */
+    get: operations["listSegments"];
+    /** Create segment */
+    post: operations["createSegment"];
+  };
+  "/api/segments/{id}/export": {
+    /** Export segment CSV */
+    get: operations["exportSegment"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -62,6 +76,24 @@ export interface components {
     };
     LaunchInvitationResponseDto: {
       launched: number;
+    };
+    ParticipantDto: {
+      id: string;
+      attributes?: {
+        [key: string]: string;
+      };
+      prescreen?: {
+        [key: string]: string;
+      };
+    };
+    CreateSegmentDto: {
+      name: string;
+      filters: {
+        [key: string]: string;
+      };
+    };
+    SegmentDto: components["schemas"]["CreateSegmentDto"] & {
+      id: string;
     };
   };
   responses: never;
@@ -168,6 +200,66 @@ export interface operations {
   };
   /** Export invitations CSV */
   exportInvitations: {
+    responses: {
+      /** @description CSV data */
+      200: {
+        content: {
+          "text/csv": string;
+        };
+      };
+    };
+  };
+  /** Search audience */
+  searchAudience: {
+    parameters: {
+      query?: {
+        attr?: string;
+        value?: string;
+      };
+    };
+    responses: {
+      /** @description Array of participants */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ParticipantDto"][];
+        };
+      };
+    };
+  };
+  /** List segments */
+  listSegments: {
+    responses: {
+      /** @description Array of segments */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentDto"][];
+        };
+      };
+    };
+  };
+  /** Create segment */
+  createSegment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSegmentDto"];
+      };
+    };
+    responses: {
+      /** @description Segment created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["SegmentDto"];
+        };
+      };
+    };
+  };
+  /** Export segment CSV */
+  exportSegment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
     responses: {
       /** @description CSV data */
       200: {

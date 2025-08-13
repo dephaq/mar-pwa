@@ -107,6 +107,74 @@ paths:
             text/csv:
               schema:
                 type: string
+  /api/audience:
+    get:
+      summary: Search audience
+      operationId: searchAudience
+      parameters:
+        - name: attr
+          in: query
+          schema:
+            type: string
+        - name: value
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Array of participants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParticipantDto'
+  /api/segments:
+    get:
+      summary: List segments
+      operationId: listSegments
+      responses:
+        '200':
+          description: Array of segments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SegmentDto'
+    post:
+      summary: Create segment
+      operationId: createSegment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentDto'
+      responses:
+        '201':
+          description: Segment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentDto'
+  /api/segments/{id}/export:
+    get:
+      summary: Export segment CSV
+      operationId: exportSegment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CSV data
+          content:
+            text/csv:
+              schema:
+                type: string
 components:
   schemas:
     SubscriptionKeysDto:
@@ -165,3 +233,35 @@ components:
       properties:
         launched:
           type: number
+    ParticipantDto:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+        prescreen:
+          type: object
+          additionalProperties:
+            type: string
+    CreateSegmentDto:
+      type: object
+      required: [name, filters]
+      properties:
+        name:
+          type: string
+        filters:
+          type: object
+          additionalProperties:
+            type: string
+    SegmentDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateSegmentDto'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
