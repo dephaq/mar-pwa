@@ -3,6 +3,92 @@
 ## Как этим пользоваться
 Запускайте группы агентов **параллельно там, где нет жёстких зависимостей**, и последовательно — где завязки на результаты предыдущих групп. Каждый агент получает «Контекст», «Цель», «Входы», «Выходы» и **точный промпт**. Менеджер запуска отмечает статусы и склеивает результаты.
 
+
+Глобальные соглашения (для всех агентов)
+
+Node/Tooling: Node ≥ 20.x, npm (или pnpm — если хотите, но тогда явно указать). TypeScript для всего нового кода. Линт: ESLint + Prettier.
+
+Структура монорепо (минимум):
+
+apps/web — PWA (текущий фронт перенести сюда позже, по желанию).
+
+apps/admin — админка (Vite React).
+
+services/api — NestJS (или FastAPI).
+
+packages/shared — общие типы (DTO/Schema/Types).
+
+Secrets/ENV:
+
+VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT (Notifications).
+
+DATABASE_URL (PostgreSQL), REDIS_URL (очереди), APP_BASE_URL (PWA origin).
+
+Добавить .env.example в каждый пакет.
+
+iOS/Web Push особенности: Запрашивать разрешения только по пользовательскому действию и только внутри установленного PWA; fallback-UI, если Notification.permission !== 'granted'.
+
+Service Worker: Workbox с clientsClaim:true, skipWaiting:true, пред-кэш базовых ассетов, обработчики push/notificationclick и навигация к deep-link из push.
+
+Метрики/гейты (DoD для PR):
+
+Lighthouse PWA/Perf/Best Practices/Accessibility ≥ 90 headless в CI (web-build).
+
+Типобезопасность (tsc --noEmit) зелёная.
+
+API-контракты (OpenAPI) синхронизированы с фронтом (генерация типов).
+
+E2E smoke (Playwright): подписка/отписка пушей, переход по пушу, создание исследования + ручная рассылка (стаб/фиктивные токены).
+
+Безопасность: CSP, HTTPS-допущения, RBAC (минимум для админки), аудит-лог.
+
+Для каждой группы добавь «Артефакты/DoD» (образец, вставь в соответствующие разделы):
+
+A1/A2/A3 (Продукт/UX):
+
+Артефакты: docs/PRD.md, docs/IA.png (или Mermaid), docs/UI-Kit.md с токенами.
+
+DoD: согласованы KPI и acceptance-критерии, зафиксированы состояния (loading/empty/error), список событий аналитики.
+
+B1 (Data-Model):
+
+Артефакты: services/api/prisma/schema.prisma или migrations/*.sql; ER-диаграмма (docs/ER.md).
+
+DoD: таблицы User, Profile, Consent, PrescreenerAnswer, Study, Invitation, Participation, Reward, DeviceSubscription, AuditEvent; индексы по endpoint, study_id+user_id, created_at, частичные индексы по status.
+
+B2 (API):
+
+Артефакты: services/api/openapi.yaml, DTO/валидаторы; генерация типов в packages/shared.
+
+DoD: REST эндпоинты (см. ниже), пагинация, rate-limits, базовая аутентификация для админки.
+
+B3 (Notifications/Web Push):
+
+Артефакты: services/notify (Node + web-push), .env.example, дока docs/notifications.md.
+
+DoD: POST /api/subscriptions, DELETE /api/subscriptions/:id, POST /api/notify (сегмент, текст, url), worker-обработчики в SW.
+
+B4 (CI/CD):
+
+Артефакты: .github/workflows/*, Lighthouse-джоб, деплой фронта (Pages) и API (Render/Vercel/Fly).
+
+C1–C4 (PWA):
+
+Артефакты: страницы, маршрутизация (TanStack Router), SW, офлайн-экраны, события телеметрии.
+
+DoD: анимации/состояния по гайдам, доступность (aria/контраст).
+
+D1–D3 (Админка):
+
+Артефакты: CRUD исследований, таргетинг/квоты, запуск рассылок, экспорт CSV.
+
+DoD: роли, логирование действий (AuditEvent).
+
+E1–E3 (Нормативка/Тексты/QA):
+
+Артефакты: legal/*, шаблоны писем/пушей, тест-план + автотесты (Playwright).
+
+DoD: чек-листы для iOS/Android/desktop, Lighthouse ≥ 90.
 ---
 
 ## Фазы и параллельность
