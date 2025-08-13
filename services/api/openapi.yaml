@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: MAR API
+  version: '1.0'
+paths:
+  /api/subscriptions:
+    post:
+      summary: Create subscription
+      operationId: createSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionDto'
+      responses:
+        '201':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDto'
+  /api/subscriptions/{id}:
+    delete:
+      summary: Remove subscription
+      operationId: deleteSubscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+  /api/studies:
+    post:
+      summary: Create study
+      operationId: createStudy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudyDto'
+      responses:
+        '201':
+          description: Study created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyDto'
+    get:
+      summary: List studies
+      operationId: listStudies
+      responses:
+        '200':
+          description: Array of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudyDto'
+  /api/studies/{id}:
+    get:
+      summary: Get study by id
+      operationId: getStudy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Study
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyDto'
+  /api/invitations/launch:
+    post:
+      summary: Launch invitations
+      operationId: launchInvitations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaunchInvitationDto'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaunchInvitationResponseDto'
+  /api/export/invitations.csv:
+    get:
+      summary: Export invitations CSV
+      operationId: exportInvitations
+      responses:
+        '200':
+          description: CSV data
+          content:
+            text/csv:
+              schema:
+                type: string
+components:
+  schemas:
+    SubscriptionKeysDto:
+      type: object
+      required: [p256dh, auth]
+      properties:
+        p256dh:
+          type: string
+        auth:
+          type: string
+    CreateSubscriptionDto:
+      type: object
+      required: [endpoint, keys]
+      properties:
+        endpoint:
+          type: string
+        keys:
+          $ref: '#/components/schemas/SubscriptionKeysDto'
+    SubscriptionDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateSubscriptionDto'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+    CreateStudyDto:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+    StudyDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateStudyDto'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+    LaunchInvitationDto:
+      type: object
+      required: [studyId]
+      properties:
+        studyId:
+          type: string
+        segment:
+          type: string
+        quota:
+          type: number
+    LaunchInvitationResponseDto:
+      type: object
+      required: [launched]
+      properties:
+        launched:
+          type: number
