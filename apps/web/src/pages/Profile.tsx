@@ -4,6 +4,9 @@ import type { components } from '@mar/shared';
 import { t } from '../i18n';
 import consentText from '../../../../legal/consent_v1.md?raw';
 
+const API = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
+const api = (p: string) => (API ? `${API}${p}` : '');
+
 type Profile = components['schemas']['ProfileDto'];
 type PrescreenBlock = components['schemas']['PrescreenBlockDto'];
 
@@ -20,7 +23,9 @@ export default function ProfilePage() {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(key),
     });
-    await fetch('/api/subscriptions', {
+    const u = api('/api/subscriptions');
+    if (!u) return;
+    await fetch(u, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sub),
@@ -51,7 +56,9 @@ export default function ProfilePage() {
       const hashArray = Array.from(new Uint8Array(hashBuffer))
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
-      await fetch('/api/consents', {
+      const u = api('/api/consents');
+      if (!u) return;
+      await fetch(u, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -104,7 +111,9 @@ function ProfileForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof Profile, string>>>({});
 
   useEffect(() => {
-    fetch('/api/profile')
+    const u = api('/api/profile');
+    if (!u) return;
+    fetch(u)
       .then((r) => r.json())
       .then((data) => setProfile(data));
   }, []);
@@ -131,7 +140,9 @@ function ProfileForm() {
   useEffect(() => {
     const tmr = setTimeout(() => {
       if (Object.values(errors).every((e) => !e)) {
-        fetch('/api/profile', {
+        const u = api('/api/profile');
+        if (!u) return;
+        fetch(u, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(profile),
@@ -193,7 +204,9 @@ function PrescreenForm() {
   const [blocks, setBlocks] = useState<PrescreenBlock[]>([]);
 
   useEffect(() => {
-    fetch('/api/prescreen')
+    const u = api('/api/prescreen');
+    if (!u) return;
+    fetch(u)
       .then((r) => r.json())
       .then((data) => setBlocks(data));
   }, []);
@@ -218,7 +231,9 @@ function PrescreenBlockItem({ block }: { block: PrescreenBlock }) {
         return;
       }
       setError('');
-      fetch(`/api/prescreen/${block.id}`, {
+      const u = api(`/api/prescreen/${block.id}`);
+      if (!u) return;
+      fetch(u, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answer }),
