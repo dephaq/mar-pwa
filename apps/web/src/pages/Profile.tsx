@@ -60,9 +60,9 @@ export default function ProfilePage() {
           givenAt: new Date().toISOString(),
         }),
       });
-      setConsentStatus('Согласие сохранено');
+      setConsentStatus(t('common.saved'));
     } catch {
-      setConsentStatus('Ошибка сохранения');
+      setConsentStatus(t('common.error'));
     }
   }
 
