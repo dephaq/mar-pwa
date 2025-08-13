@@ -1,12 +1,13 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: MAR API
-  version: '1.0'
+  version: "1.0.0"
+
 paths:
   /api/subscriptions:
     post:
-      summary: Create subscription
       operationId: createSubscription
+      summary: Create subscription
       requestBody:
         required: true
         content:
@@ -20,23 +21,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubscriptionDto'
+
   /api/subscriptions/{id}:
     delete:
-      summary: Remove subscription
       operationId: deleteSubscription
+      summary: Remove subscription
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       responses:
         '204':
           description: Deleted
+
   /api/studies:
+    get:
+      operationId: listStudies
+      summary: List studies
+      responses:
+        '200':
+          description: Array of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudyDto'
     post:
-      summary: Create study
       operationId: createStudy
+      summary: Create study
       requestBody:
         required: true
         content:
@@ -50,28 +64,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudyDto'
-    get:
-      summary: List studies
-      operationId: listStudies
-      responses:
-        '200':
-          description: Array of studies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StudyDto'
+
   /api/studies/{id}:
     get:
-      summary: Get study by id
       operationId: getStudy
+      summary: Get study by id
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       responses:
         '200':
           description: Study
@@ -79,10 +81,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudyDto'
+
   /api/invitations/launch:
     post:
-      summary: Launch invitations
       operationId: launchInvitations
+      summary: Launch invitations
       requestBody:
         required: true
         content:
@@ -96,21 +99,104 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LaunchInvitationResponseDto'
+
   /api/export/invitations.csv:
     get:
-      summary: Export invitations CSV
       operationId: exportInvitations
+      summary: Export invitations CSV
       responses:
         '200':
-          description: CSV data
+          description: CSV
           content:
             text/csv:
               schema:
                 type: string
+                format: binary
+
+  /api/audience:
+    get:
+      operationId: searchAudience
+      summary: Search audience
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: city
+          schema: { type: string }
+        - in: query
+          name: gender
+          schema: { type: string }
+        - in: query
+          name: prescreenQuestion
+          schema: { type: string }
+        - in: query
+          name: prescreenAnswer
+          schema: { type: string }
+        - in: query
+          name: segmentId
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AudienceDto'
+
+  /api/audience/export.csv:
+    get:
+      operationId: exportAudience
+      summary: Export audience CSV
+      parameters:
+        - in: query
+          name: segmentId
+          schema: { type: string, nullable: true }
+      responses:
+        '200':
+          description: CSV
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+
+  /api/audience/segments:
+    get:
+      operationId: listSegments
+      summary: List saved segments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SegmentDto'
+    post:
+      operationId: createSegment
+      summary: Create new segment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSegmentDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SegmentDto'
+
   /api/profile:
     get:
-      summary: Get profile
       operationId: getProfile
+      summary: Get profile
       responses:
         '200':
           description: Profile
@@ -119,8 +205,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileDto'
     put:
-      summary: Update profile
       operationId: updateProfile
+      summary: Update profile
       requestBody:
         required: true
         content:
@@ -134,10 +220,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProfileDto'
+
   /api/prescreen:
     get:
-      summary: Get prescreen blocks
       operationId: getPrescreen
+      summary: Get prescreen blocks
       responses:
         '200':
           description: Array of prescreen blocks
@@ -147,16 +234,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PrescreenBlockDto'
+
   /api/prescreen/{id}:
     put:
-      summary: Update prescreen block
       operationId: updatePrescreenBlock
+      summary: Update prescreen block
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       requestBody:
         required: true
         content:
@@ -170,108 +257,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PrescreenBlockDto'
+
 components:
   schemas:
     SubscriptionKeysDto:
       type: object
-      required: [p256dh, auth]
       properties:
-        p256dh:
-          type: string
-        auth:
-          type: string
+        p256dh: { type: string }
+        auth: { type: string }
     CreateSubscriptionDto:
       type: object
-      required: [endpoint, keys]
       properties:
-        endpoint:
-          type: string
+        endpoint: { type: string }
         keys:
           $ref: '#/components/schemas/SubscriptionKeysDto'
     SubscriptionDto:
       allOf:
         - $ref: '#/components/schemas/CreateSubscriptionDto'
         - type: object
-          required: [id]
           properties:
-            id:
-              type: string
+            id: { type: string }
+
     CreateStudyDto:
       type: object
-      required: [title]
       properties:
-        title:
-          type: string
-        description:
-          type: string
+        title: { type: string }
+        description: { type: string }
+
     StudyDto:
       allOf:
         - $ref: '#/components/schemas/CreateStudyDto'
         - type: object
-          required: [id]
           properties:
-            id:
-              type: string
+            id: { type: string }
+
     LaunchInvitationDto:
       type: object
-      required: [studyId]
       properties:
-        studyId:
-          type: string
-        segment:
-          type: string
-        quota:
-          type: number
+        studyId: { type: string }
+        segment: { type: string }
+        quota: { type: integer }
+
     LaunchInvitationResponseDto:
       type: object
-      required: [launched]
       properties:
-        launched:
-          type: number
+        launched: { type: integer }
+
+    AudienceFilterDto:
+      type: object
+      properties:
+        q: { type: string }
+        city: { type: string }
+        gender: { type: string }
+        prescreenQuestion: { type: string }
+        prescreenAnswer: { type: string }
+        segmentId: { type: string }
+
+    AudienceDto:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: string }
+        name: { type: string }
+        age: { type: integer }
+        gender: { type: string }
+        city: { type: string }
+
+    CreateSegmentDto:
+      type: object
+      properties:
+        name: { type: string }
+        filter:
+          $ref: '#/components/schemas/AudienceFilterDto'
+
+    SegmentDto:
+      allOf:
+        - $ref: '#/components/schemas/CreateSegmentDto'
+        - type: object
+          properties:
+            id: { type: string }
+
     ProfileDto:
       type: object
-      required: [name, age, gender, city, profession, contacts]
       properties:
-        name:
-          type: string
-        age:
-          type: number
-        gender:
-          type: string
-        city:
-          type: string
-        profession:
-          type: string
-        contacts:
-          type: string
+        name: { type: string }
+        age: { type: integer }
+        gender: { type: string }
+        city: { type: string }
+        profession: { type: string }
+        contacts: { type: string }
+
     UpdateProfileDto:
       type: object
       properties:
-        name:
-          type: string
-        age:
-          type: number
-        gender:
-          type: string
-        city:
-          type: string
-        profession:
-          type: string
-        contacts:
-          type: string
+        name: { type: string }
+        age: { type: integer }
+        gender: { type: string }
+        city: { type: string }
+        profession: { type: string }
+        contacts: { type: string }
+
     PrescreenBlockDto:
       type: object
-      required: [id, question, answer]
       properties:
-        id:
-          type: string
-        question:
-          type: string
-        answer:
-          type: string
+        id: { type: string }
+        question: { type: string }
+        answer: { type: string }
+
     UpdatePrescreenBlockDto:
       type: object
-      required: [answer]
       properties:
-        answer:
-          type: string
+        answer: { type: string }

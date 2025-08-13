@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
-import { SubscriptionsModule } from './subscriptions/subscriptions.module';
-import { StudiesModule } from './studies/studies.module';
-import { InvitationsModule } from './invitations/invitations.module';
-import { ExportModule } from './export/export.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AudienceModule } from './audience/audience.module';
 import { ProfileModule } from './profile/profile.module';
 import { PrescreenModule } from './prescreen/prescreen.module';
 
 @Module({
   imports: [
-    SubscriptionsModule,
-    StudiesModule,
-    InvitationsModule,
-    ExportModule,
+    AudienceModule,
     ProfileModule,
     PrescreenModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
