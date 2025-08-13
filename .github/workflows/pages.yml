@@ -18,7 +18,7 @@ jobs:
       - run: npm run build --workspace apps/web
       - run: cp apps/web/dist/index.html apps/web/dist/404.html
       - run: touch apps/web/dist/.nojekyll
-      - uses: actions/upload-pages-artifact@v2
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/web/dist
   deploy:
