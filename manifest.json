@@ -1,6 +1,6 @@
 {
-  "name": "MAR Consult Опросы",
-  "short_name": "MAR Опрос",
+  "name": "MAR",
+  "short_name": "MAR",
   "description": "Приложение для участия в маркетинговых исследованиях от MAR Consult.",
   "start_url": ".",
   "display": "standalone",
