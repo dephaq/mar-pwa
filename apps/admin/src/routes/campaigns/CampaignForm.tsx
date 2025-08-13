@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { components } from '@mar/shared';
+import { t } from '../../i18n';
 
 type CampaignCreateDto = components['schemas']['CampaignCreateDto'];
 
@@ -39,19 +40,19 @@ export default function CampaignForm({ onSubmit, initial }: Props) {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <label>
-        Имя
+        {t('campaigns.form.name')}
         <input name="name" value={form.name} onChange={handleChange} />
       </label>
       <label>
-        Study ID
+        {t('campaigns.form.studyId')}
         <input name="studyId" value={form.studyId || ''} onChange={handleChange} />
       </label>
       <label>
-        Segment (JSON)
+        {t('campaigns.form.segment')}
         <textarea name="segment" value={form.segment ? JSON.stringify(form.segment) : ''} onChange={handleChange} />
       </label>
       <label>
-        Throttle per minute
+        {t('campaigns.form.throttlePerMinute')}
         <input
           type="number"
           name="throttlePerMinute"
@@ -60,18 +61,18 @@ export default function CampaignForm({ onSubmit, initial }: Props) {
         />
       </label>
       <label>
-        Title
+        {t('campaigns.form.title')}
         <input name="message.title" value={form.message.title} onChange={handleChange} />
       </label>
       <label>
-        Body
+        {t('campaigns.form.body')}
         <input name="message.body" value={form.message.body} onChange={handleChange} />
       </label>
       <label>
-        URL
+        {t('campaigns.form.url')}
         <input name="message.url" value={form.message.url || ''} onChange={handleChange} />
       </label>
-      <button type="submit">Сохранить</button>
+      <button type="submit">{t('campaigns.form.save')}</button>
     </form>
   );
 }

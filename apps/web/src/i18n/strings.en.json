@@ -1,0 +1,42 @@
+{
+  "common": {
+    "saved": "Saved",
+    "error": "Error",
+    "enableNotifications": "Enable notifications",
+    "joinStudy": "Join study",
+    "refreshPrescreen": "Refresh prescreen"
+  },
+  "sections": {
+    "home": "Home",
+    "profile": "Profile",
+    "prescreen": "Prescreen",
+    "studies": "Studies",
+    "rewards": "Rewards",
+    "support": "Support",
+    "settings": "Settings"
+  },
+  "studies": {
+    "filter": {
+      "label": "Filter",
+      "all": "All",
+      "sent": "New",
+      "opened": "Opened",
+      "started": "In progress",
+      "finished": "Finished"
+    },
+    "card": {
+      "duration": "Duration",
+      "minutes": "min",
+      "reward": "Reward",
+      "deadline": "Deadline",
+      "status": "Status",
+      "finish": "Finish",
+      "statusLabels": {
+        "sent": "New",
+        "opened": "Opened",
+        "started": "In progress",
+        "finished": "Finished"
+      }
+    }
+  }
+}

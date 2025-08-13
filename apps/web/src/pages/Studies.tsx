@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import StudyCard from '../components/StudyCard';
 import { Study, StudyStatus } from '../types';
 import { trackEvent } from '../lib/analytics';
+import { t } from '../i18n';
 
 const initialStudies: Study[] = [
   {
@@ -66,18 +67,18 @@ export default function Studies() {
 
   return (
     <div>
-      <h2>Исследования</h2>
+      <h2>{t('sections.studies')}</h2>
       <label>
-        Фильтр:{' '}
+        {t('studies.filter.label')}: 
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value as 'all' | StudyStatus)}
         >
-          <option value="all">Все</option>
-          <option value="sent">Новые</option>
-          <option value="opened">Открытые</option>
-          <option value="started">В процессе</option>
-          <option value="finished">Завершённые</option>
+          <option value="all">{t('studies.filter.all')}</option>
+          <option value="sent">{t('studies.filter.sent')}</option>
+          <option value="opened">{t('studies.filter.opened')}</option>
+          <option value="started">{t('studies.filter.started')}</option>
+          <option value="finished">{t('studies.filter.finished')}</option>
         </select>
       </label>
       <div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { components } from '@mar/shared';
+import { t } from '../../i18n';
 
 type CreateStudyDto = components['schemas']['CreateStudyDto'];
 
@@ -46,7 +47,7 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
       };
       onSubmit(payload);
     } catch (err) {
-      setError('Invalid JSON');
+      setError(t('studies.form.errors.invalidJson'));
     }
   };
 
@@ -54,19 +55,19 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {error && <div style={{ color: 'red' }}>{error}</div>}
       <label>
-        Title*
+        {t('studies.form.title')}*
         <input value={title} onChange={(e) => setTitle(e.target.value)} required />
       </label>
       <label>
-        Link*
+        {t('studies.form.link')}*
         <input value={link} onChange={(e) => setLink(e.target.value)} required />
       </label>
       <label>
-        Description
+        {t('studies.form.description')}
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
       </label>
       <label>
-        Duration (min)
+        {t('studies.form.durationMin')}
         <input
           type="number"
           value={durationMin}
@@ -74,7 +75,7 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
         />
       </label>
       <label>
-        Reward (cents)
+        {t('studies.form.rewardCents')}
         <input
           type="number"
           value={rewardCents}
@@ -82,7 +83,7 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
         />
       </label>
       <label>
-        Deadline
+        {t('studies.form.deadline')}
         <input
           type="datetime-local"
           value={deadlineAt}
@@ -90,17 +91,17 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
         />
       </label>
       <label>
-        Targeting (JSON)
+        {t('studies.form.targeting')}
         <textarea value={targeting} onChange={(e) => setTargeting(e.target.value)} />
       </label>
       <label>
-        Quotas (JSON)
+        {t('studies.form.quotas')}
         <textarea value={quotas} onChange={(e) => setQuotas(e.target.value)} />
       </label>
       <div style={{ display: 'flex', gap: '1rem' }}>
-        <button type="submit">Сохранить</button>
+        <button type="submit">{t('studies.form.save')}</button>
         <button type="button" onClick={() => setPreview((p) => !p)}>
-          Предпросмотр
+          {t('studies.form.preview')}
         </button>
       </div>
       {preview && (
@@ -111,9 +112,21 @@ export default function StudyForm({ initial = {}, onSubmit }: Props) {
               {link}
             </a>
           </p>
-          {durationMin && <p>Длительность: {durationMin} мин</p>}
-          {rewardCents && <p>Вознаграждение: {rewardCents}¢</p>}
-          {deadlineAt && <p>Дедлайн: {deadlineAt}</p>}
+          {durationMin && (
+            <p>
+              {t('studies.form.durationMin')}: {durationMin}
+            </p>
+          )}
+          {rewardCents && (
+            <p>
+              {t('studies.form.rewardCents')}: {rewardCents}¢
+            </p>
+          )}
+          {deadlineAt && (
+            <p>
+              {t('studies.form.deadline')}: {deadlineAt}
+            </p>
+          )}
         </div>
       )}
     </form>

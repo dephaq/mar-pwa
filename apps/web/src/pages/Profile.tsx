@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { components } from '@mar/shared';
+import { t } from '../i18n';
 
 type Profile = components['schemas']['ProfileDto'];
 type PrescreenBlock = components['schemas']['PrescreenBlockDto'];
@@ -8,7 +9,7 @@ export default function ProfilePage() {
   async function enableNotifications() {
     const perm = await Notification.requestPermission();
     if (perm !== 'granted') {
-      alert('Отказано');
+      alert(t('common.error'));
       return;
     }
     const registration = await navigator.serviceWorker.ready;
@@ -22,7 +23,7 @@ export default function ProfilePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sub),
     });
-    alert('Подписка включена');
+    alert(t('common.saved'));
   }
 
   function urlBase64ToUint8Array(base64String: string) {
@@ -34,10 +35,10 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <h2>Профиль</h2>
-      <button onClick={enableNotifications}>Включить уведомления</button>
+      <h2>{t('sections.profile')}</h2>
+      <button onClick={enableNotifications}>{t('common.enableNotifications')}</button>
       <ProfileForm />
-      <h3>Прескрин</h3>
+      <h3>{t('sections.prescreen')}</h3>
       <PrescreenForm />
     </div>
   );

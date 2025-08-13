@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { listCampaigns, launchCampaign, stopCampaign } from '../../api/client';
 import { Link } from '@tanstack/react-router';
 import type { components } from '@mar/shared';
+import { t } from '../../i18n';
 
 type CampaignDto = components['schemas']['CampaignDto'];
 
@@ -12,14 +13,14 @@ export default function CampaignsList() {
   }, []);
   return (
     <div>
-      <h2>Кампании</h2>
-      <Link to="/campaigns/new">Новая</Link>
+      <h2>{t('sections.campaigns')}</h2>
+      <Link to="/campaigns/new">{t('campaigns.list.new')}</Link>
       <table>
         <thead>
           <tr>
-            <th>Имя</th>
-            <th>Статус</th>
-            <th>Создана</th>
+            <th>{t('campaigns.list.name')}</th>
+            <th>{t('campaigns.list.status')}</th>
+            <th>{t('campaigns.list.created')}</th>
             <th></th>
           </tr>
         </thead>
@@ -31,7 +32,7 @@ export default function CampaignsList() {
               <td>{c.createdAt}</td>
               <td style={{ display: 'flex', gap: 8 }}>
                 <Link to="/campaigns/$id" params={{ id: c.id }}>
-                  View
+                  {t('campaigns.list.view')}
                 </Link>
                 {c.status === 'draft' && (
                   <button
@@ -44,7 +45,7 @@ export default function CampaignsList() {
                       );
                     }}
                   >
-                    Launch
+                    {t('campaigns.list.launch')}
                   </button>
                 )}
                 {c.status === 'launched' && (
@@ -58,7 +59,7 @@ export default function CampaignsList() {
                       );
                     }}
                   >
-                    Stop
+                    {t('campaigns.list.stop')}
                   </button>
                 )}
               </td>

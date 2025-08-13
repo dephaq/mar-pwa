@@ -1,0 +1,42 @@
+{
+  "common": {
+    "saved": "Сохранено",
+    "error": "Ошибка",
+    "enableNotifications": "Включить уведомления",
+    "joinStudy": "Принять участие",
+    "refreshPrescreen": "Обновить прескрин"
+  },
+  "sections": {
+    "home": "Главная",
+    "profile": "Профиль",
+    "prescreen": "Прескрин",
+    "studies": "Исследования",
+    "rewards": "Награды",
+    "support": "Поддержка",
+    "settings": "Настройки"
+  },
+  "studies": {
+    "filter": {
+      "label": "Фильтр",
+      "all": "Все",
+      "sent": "Новые",
+      "opened": "Открытые",
+      "started": "В процессе",
+      "finished": "Завершённые"
+    },
+    "card": {
+      "duration": "Длительность",
+      "minutes": "мин",
+      "reward": "Вознаграждение",
+      "deadline": "Дедлайн",
+      "status": "Статус",
+      "finish": "Завершить",
+      "statusLabels": {
+        "sent": "Новое",
+        "opened": "Открыто",
+        "started": "В процессе",
+        "finished": "Завершено"
+      }
+    }
+  }
+}

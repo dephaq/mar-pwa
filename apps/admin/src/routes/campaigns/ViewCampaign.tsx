@@ -7,6 +7,7 @@ import {
   stopCampaign,
 } from '../../api/client';
 import type { components } from '@mar/shared';
+import { t } from '../../i18n';
 
 type CampaignDto = components['schemas']['CampaignDto'];
 type NotificationEventDto = components['schemas']['NotificationEventDto'];
@@ -23,7 +24,9 @@ export default function ViewCampaign() {
   return (
     <div>
       <h2>{campaign.name}</h2>
-      <div>Статус: {campaign.status}</div>
+      <div>
+        {t('campaigns.view.status')}: {campaign.status}
+      </div>
       {campaign.status === 'draft' && (
         <button
           onClick={async () => {
@@ -31,7 +34,7 @@ export default function ViewCampaign() {
             setCampaign({ ...campaign, status: 'launched' });
           }}
         >
-          Запустить
+          {t('campaigns.view.launch')}
         </button>
       )}
       {campaign.status === 'launched' && (
@@ -41,10 +44,10 @@ export default function ViewCampaign() {
             setCampaign({ ...campaign, status: 'stopped' });
           }}
         >
-          Остановить
+          {t('campaigns.view.stop')}
         </button>
       )}
-      <h3>События</h3>
+      <h3>{t('campaigns.view.events')}</h3>
       <ul>
         {events.map((e) => (
           <li key={e.id}>
