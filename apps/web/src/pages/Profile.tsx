@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import type { components } from '@mar/shared';
+import consentText from '../../../../legal/consent_v1.md?raw';
 
 type Profile = components['schemas']['ProfileDto'];
 type PrescreenBlock = components['schemas']['PrescreenBlockDto'];
@@ -32,9 +34,53 @@ export default function ProfilePage() {
     return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
   }
 
+  const [consent, setConsent] = useState(false);
+  const [consentStatus, setConsentStatus] = useState('');
+
+  async function handleConsent(e: React.ChangeEvent<HTMLInputElement>) {
+    const checked = e.target.checked;
+    setConsent(checked);
+    if (!checked) {
+      setConsentStatus('');
+      return;
+    }
+    try {
+      const enc = new TextEncoder();
+      const hashBuffer = await crypto.subtle.digest(
+        'SHA-256',
+        enc.encode(consentText),
+      );
+      const hashArray = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      await fetch('/api/consents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          version: 'v1',
+          textHash: hashArray,
+          givenAt: new Date().toISOString(),
+        }),
+      });
+      setConsentStatus('Согласие сохранено');
+    } catch {
+      setConsentStatus('Ошибка сохранения');
+    }
+  }
+
   return (
     <div>
       <h2>Профиль</h2>
+      <p>
+        <Link to="/legal/privacy">Политика приватности</Link>
+      </p>
+      <div>
+        <label>
+          <input type="checkbox" checked={consent} onChange={handleConsent} /> Согласен с
+          обработкой данных (v1)
+        </label>
+        {consentStatus && <div>{consentStatus}</div>}
+      </div>
       <button onClick={enableNotifications}>Включить уведомления</button>
       <ProfileForm />
       <h3>Прескрин</h3>

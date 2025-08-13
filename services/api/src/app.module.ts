@@ -6,9 +6,17 @@ import { ProfileModule } from './profile/profile.module';
 import { PrescreenModule } from './prescreen/prescreen.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ConsentsModule } from './consents/consents.module';
 
 @Module({
-  imports: [AudienceModule, ProfileModule, PrescreenModule, SubscriptionsModule, NotificationsModule],
+  imports: [
+    AudienceModule,
+    ProfileModule,
+    PrescreenModule,
+    SubscriptionsModule,
+    NotificationsModule,
+    ConsentsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
