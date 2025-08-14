@@ -19,9 +19,5 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           config: |
-            {
-              "ci": {
-                "collect": { "staticDistDir": "apps/web/dist", "url": ["/"] },
-                "upload": { "target": "temporary-public-storage" }
-              }
-            }
+            { "ci": { "collect": { "staticDistDir": "apps/web/dist", "url": ["/"] }, "upload": { "target": "temporary-public-storage" } } }
+
