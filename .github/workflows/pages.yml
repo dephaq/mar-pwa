@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w apps/web
+      - run: npm run build -w apps/admin
+      - run: mkdir -p apps/web/dist/admin
+      - run: rsync -a --delete apps/admin/dist/ apps/web/dist/admin/
       - run: cp apps/web/dist/index.html apps/web/dist/404.html
       - run: touch apps/web/dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
