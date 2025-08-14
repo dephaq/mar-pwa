@@ -1,0 +1,5 @@
+Changed files:
+apps/web/vite.config.ts
+apps/web/src/main.tsx
+.github/workflows/pages.yml
+.github/workflows/lighthouse.yml
