@@ -25,6 +25,7 @@ const rootRoute = new RootRoute({
         <Link to="/studies">{t('sections.studies')}</Link>
         <Link to="/rewards">{t('sections.rewards')}</Link>
         <Link to="/support">{t('sections.support')}</Link>
+        <a href="/mar-pwa/admin/">Admin</a>
       </nav>
       <Outlet />
     </div>
