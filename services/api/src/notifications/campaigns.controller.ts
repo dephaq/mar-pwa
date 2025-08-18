@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CampaignCreateDto, NotifyDto } from './dto';
 
-@Controller('api')
+@Controller()
 export class CampaignsController {
   constructor(private readonly service: CampaignsService) {}
 
