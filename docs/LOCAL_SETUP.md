@@ -35,37 +35,36 @@ npm install
 npm run gen:api-types
 ```
 
-## 3) Переменные окружения (.env)
+## 3) Переменные окружения (.env) — централизовано в корне
 
-Создайте файлы `.env` в следующих пакетах.
+Теперь все переменные хранятся в одном файле в корне репозитория:
 
-1) `services/api/.env` (Web Push VAPID):
+1) Создайте `./.env` из примера:
 ```bash
+cp .env.example .env
+```
+Заполните значения:
+```dotenv
+# ===== Frontend (Vite) — shared for apps/web and apps/admin =====
+VITE_API_URL=http://localhost:3000
+VITE_VAPID_PUBLIC_KEY=<Ваш VAPID public key>
+
+# ===== Backend (Nest API) =====
+PORT=3000
 VAPID_SUBJECT=mailto:you@example.com
 VAPID_PUBLIC_KEY=<Ваш VAPID public key>
 VAPID_PRIVATE_KEY=<Ваш VAPID private key>
-PORT=3000
 ```
-Сгенерировать ключи (разово):
+
+2) Сгенерировать VAPID ключи (разово):
 ```bash
 npx web-push generate-vapid-keys
 # Вывод вставьте как VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY
 ```
 
-2) `apps/web/.env` (PWA):
-```bash
-VITE_API_URL=http://localhost:3000
-VITE_VAPID_PUBLIC_KEY=<тот же public key, что и выше>
-```
-
-3) `apps/admin/.env` (Админка):
-```bash
-VITE_API_URL=http://localhost:3000
-```
-
 Примечания:
-- Веб и админка читают `VITE_API_URL` из `.env`.
-- PWA читает `VITE_VAPID_PUBLIC_KEY` для `PushManager.subscribe()` в `apps/web/src/pages/Profile.tsx`.
+- Фронтенды читают `.env` из корня через `envDir: '../../'` в `vite.config.ts`.
+- API загружает `.env` через `@nestjs/config` из `../../.env`.
 
 ## 4) Запуск сервисов (dev)
 
