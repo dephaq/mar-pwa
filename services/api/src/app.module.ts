@@ -8,6 +8,7 @@ import { PrescreenModule } from './prescreen/prescreen.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ConsentsModule } from './consents/consents.module';
+import { StudiesModule } from './studies/studies.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConsentsModule } from './consents/consents.module';
     SubscriptionsModule,
     NotificationsModule,
     ConsentsModule,
+    StudiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
